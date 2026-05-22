@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nosotros — Bellmont</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero {
+      background: linear-gradient(160deg, #0D3B66 0%, #0a2d4e 100%);
+      padding: 8rem 2rem 5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0; height: 80px;
+      background: var(--blanco-calido);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .page-hero h1 { font-family:var(--font-titulo); font-weight:800; font-size:clamp(2.2rem,5vw,3.5rem); color:white; position:relative; }
+    .page-hero p { color:rgba(255,255,255,0.72); font-size:1.05rem; margin-top:0.75rem; position:relative; }
+    .breadcrumb { display:flex; align-items:center; gap:.5rem; justify-content:center; margin-top:1.25rem; position:relative; }
+    .breadcrumb a { color:var(--dorado); font-size:.85rem; font-family:var(--font-titulo); font-weight:500; }
+    .breadcrumb span { color:rgba(255,255,255,0.4); font-size:.85rem; }
+
+    /* Misión / Visión */
+    .mv-section { max-width:1280px; margin:0 auto; padding:5rem 2rem 2rem; }
+    .mv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .mv-card {
+      border-radius:var(--radius-lg); padding:2.5rem 2rem;
+      transition:var(--transition); position:relative; overflow:hidden;
+    }
+    .mv-card.mission { background:var(--azul-principal); color:white; }
+    .mv-card.vision { background:var(--dorado-suave); border:1px solid rgba(200,169,107,0.3); }
+    .mv-card.values { background:white; border:1px solid var(--gris-claro); }
+    .mv-card::before { content:attr(data-num); position:absolute; top:-10px; right:10px; font-family:var(--font-titulo); font-weight:800; font-size:6rem; opacity:0.08; line-height:1; }
+    .mv-card h3 { font-family:var(--font-titulo); font-weight:700; font-size:1.1rem; margin-bottom:0.75rem; }
+    .mv-card.mission h3 { color:var(--dorado); }
+    .mv-card.vision h3 { color:var(--azul-principal); }
+    .mv-card.values h3 { color:var(--azul-principal); }
+    .mv-card p { font-size:0.9rem; line-height:1.75; }
+    .mv-card.mission p { color:rgba(255,255,255,0.82); }
+    .mv-card.vision p, .mv-card.values p { color:#6c757d; }
+    .values-list { list-style:none; margin-top:0.5rem; }
+    .values-list li { font-size:0.875rem; color:#6c757d; padding:0.35rem 0; border-bottom:1px solid var(--gris-claro); display:flex; align-items:center; gap:0.5rem; }
+    .values-list li::before { content:'✦'; color:var(--dorado); font-size:0.65rem; }
+    .values-list li:last-child { border:none; }
+
+    /* Historia */
+    .story-section { max-width:1280px; margin:0 auto; padding:3rem 2rem; }
+    .story-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .story-visual {
+      background: linear-gradient(135deg, #0D3B66, #1D5C96);
+      border-radius:var(--radius-lg);
+      height:420px;
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+    }
+    .story-visual::before {
+      content:'';
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse at 70% 30%, rgba(200,169,107,0.2) 0%, transparent 60%);
+    }
+    .story-badge-big {
+      font-family:var(--font-titulo); font-weight:800;
+      font-size:5rem; color:rgba(255,255,255,0.12);
+      position:absolute; bottom:1rem; right:1.5rem;
+      line-height:1;
+    }
+    .story-center { text-align:center; position:relative; z-index:2; }
+    .story-year { font-family:var(--font-titulo); font-weight:800; font-size:3.5rem; color:white; }
+    .story-founded { font-size:0.85rem; color:var(--dorado); letter-spacing:0.15em; text-transform:uppercase; }
+
+    /* Timeline */
+    .timeline { margin-top:2rem; position:relative; }
+    .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:linear-gradient(to bottom, var(--dorado), transparent); }
+    .tl-item { padding-left:2rem; padding-bottom:2rem; position:relative; }
+    .tl-dot { position:absolute; left:-5px; top:4px; width:12px; height:12px; background:var(--dorado); border-radius:50%; border:2px solid white; box-shadow:0 0 0 2px var(--dorado); }
+    .tl-year { font-family:var(--font-titulo); font-weight:700; font-size:0.8rem; color:var(--dorado); letter-spacing:0.08em; margin-bottom:0.2rem; }
+    .tl-title { font-family:var(--font-titulo); font-weight:600; font-size:0.95rem; color:var(--azul-principal); margin-bottom:0.2rem; }
+    .tl-desc { font-size:0.85rem; color:#6c757d; line-height:1.5; }
+
+    /* Team */
+    .team-section { background:white; padding:5rem 0; }
+    .team-inner { max-width:1280px; margin:0 auto; padding:0 2rem; }
+    .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:3rem; }
+    .team-card {
+      text-align:center; padding:2.5rem 1.5rem;
+      border:1px solid var(--gris-claro); border-radius:var(--radius-lg);
+      transition:var(--transition);
+    }
+    .team-card:hover { box-shadow:var(--sombra-hover); transform:translateY(-4px); border-color:rgba(200,169,107,0.3); }
+    .team-avatar {
+      width:90px; height:90px; border-radius:50%;
+      margin:0 auto 1.25rem;
+      display:flex; align-items:center; justify-content:center;
+      font-size:2.5rem;
+      border:3px solid var(--dorado);
+    }
+    .team-name { font-family:var(--font-titulo); font-weight:700; font-size:1.05rem; color:var(--azul-principal); }
+    .team-role { font-size:0.8rem; color:var(--dorado); font-family:var(--font-titulo); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin:0.25rem 0 0.75rem; }
+    .team-desc { font-size:0.85rem; color:#6c757d; line-height:1.6; }
+
+    /* Números */
+    .numbers-section { background:var(--azul-principal); padding:5rem 0; }
+    .numbers-inner { max-width:1280px; margin:0 auto; padding:0 2rem; display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; text-align:center; }
+    .num-item {}
+    .num-value { font-family:var(--font-titulo); font-weight:800; font-size:3rem; color:white; line-height:1; }
+    .num-gold { color:var(--dorado); }
+    .num-label { font-size:0.875rem; color:rgba(255,255,255,0.65); margin-top:0.4rem; }
+
+    @media (max-width:900px) {
+      .mv-grid { grid-template-columns:1fr; }
+      .story-grid { grid-template-columns:1fr; }
+      .team-grid { grid-template-columns:repeat(2,1fr); }
+      .numbers-inner { grid-template-columns:repeat(2,1fr); gap:3rem; }
+    }
+    @media (max-width:500px) {
+      .team-grid { grid-template-columns:1fr; }
+      .numbers-inner { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar" class="scrolled">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html"><span class="logo-text">BELLMONT</span></a>
+        <span class="logo-accent"></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="nosotros.html" style="color:var(--azul-principal);font-weight:700;">Nosotros</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <button class="nav-cta" onclick="location.href='catalogo.html'">Ver Catálogo</button>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-badge">Nuestra Historia</div>
+    <h1>Quiénes somos <span class="title-accent">✦</span></h1>
+    <p>Pasión por la confección y el estilo desde nuestros inicios</p>
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a><span>›</span>
+      <span style="color:rgba(255,255,255,0.6)">Nosotros</span>
+    </div>
+  </div>
+
+  <!-- Misión / Visión / Valores -->
+  <div class="mv-section">
+    <div class="mv-grid">
+      <div class="mv-card mission reveal" data-num="01">
+        <h3>Misión</h3>
+        <p>Crear polos de alta calidad que combinen elegancia, comodidad y durabilidad, permitiendo que cada hombre proyecte confianza y distinción en cualquier ocasión de su vida.</p>
+      </div>
+      <div class="mv-card vision reveal" data-num="02">
+        <h3>Visión</h3>
+        <p>Ser la marca de polos premium más reconocida de Colombia, expandiendo nuestro alcance a toda Latinoamérica y convirtiéndonos en el referente de estilo masculino en la región para 2028.</p>
+      </div>
+      <div class="mv-card values reveal" data-num="03">
+        <h3>Valores</h3>
+        <ul class="values-list">
+          <li>Calidad sin compromisos</li>
+          <li>Honestidad en cada trato</li>
+          <li>Innovación constante</li>
+          <li>Servicio al cliente excepcional</li>
+          <li>Responsabilidad artesanal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Historia -->
+  <div class="story-section">
+    <div class="story-grid">
+      <div class="story-visual reveal">
+        <div class="story-center">
+          <div class="story-year">2014</div>
+          <div class="story-founded">Año de fundación</div>
+          <p style="color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top:0.5rem;">Colombia</p>
+        </div>
+        <div class="story-badge-big">B</div>
+      </div>
+      <div>
+        <div class="section-badge">Nuestra trayectoria</div>
+        <h2 class="section-title">Una historia de<br/><span class="title-accent">Pasión y Calidad</span></h2>
+        <p class="section-desc">Bellmont nació de una idea simple: hacer polos que la gente realmente quisiera usar todos los días. No ropa desechable, sino prendas que duraran y que proyectaran elegancia.</p>
+
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2014</div>
+            <div class="tl-title">Los primeros 10 polos</div>
+            <div class="tl-desc">Comenzamos con 10 unidades hechas a mano, vendidas entre amigos y familia. La aceptación fue inmediata.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2018</div>
+            <div class="tl-title">Primeros Clientes "Grandes"</div>
+            <div class="tl-desc">Nos empezaban a reconocer en el lugar donde vendemos normalemte, y a comprar camisetas al por mayor.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2022</div>
+            <div class="tl-title">Primeros Vistasos a la Web</div>
+            <div class="tl-desc">Empezabamos a ver la posibilidad del mundo del internet, pero se quedo en un intento.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2026</div>
+            <div class="tl-title">Lanzamiento a la Web</div>
+            <div class="tl-desc">Con esta pagina no solo querernos expandirnos aun mas, sino empezar poco a poco a llegar a nueva gente y actualizar un poco la metodologia de venta normal, que llevamos desde que se creo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Números -->
+  <div class="numbers-section">
+    <div class="numbers-inner">
+      <div class="num-item reveal">
+        <div class="num-value num-gold">500<span style="font-size:2rem">+</span></div>
+        <div class="num-label">Clientes satisfechos</div>
+      </div>
+      <div class="num-item reveal">
+        <div class="num-value num-gold">30<span style="font-size:2rem">+</span></div>
+        <div class="num-label">Modelos en catálogo</div>
+      </div>
+      <div class="num-item reveal">
+        <div class="num-value num-gold">14</div>
+        <div class="num-label">Años de experiencia</div>
+      </div>
+      <div class="num-item reveal">
+        <div class="num-value num-gold">3<span style="font-size:2rem">+</span></div>
+        <div class="num-label">Empresas corporativas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equipo -->
+  <div class="team-section">
+    <div class="team-inner">
+      <div style="text-align:center;">
+        <div class="section-badge" style="display:inline-block;">El Equipo</div>
+        <h2 class="section-title">Las personas detrás de<br/><span class="title-accent">Bellmont</span></h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="team-avatar" style="background:var(--dorado-suave);">👨‍💼</div>
+          <div class="team-name">Pedro Rincon/Padre</div>
+          <div class="team-role">Fundador & Director</div>
+          <p class="team-desc">Apasionado por la moda masculina y la confección artesanal. 10 años de experiencia en el sector textil.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar" style="background:var(--dorado-suave);">👨‍🏭</div>
+          <div class="team-name">Esteban Rincon/Hijo</div>
+          <div class="team-role">Ing. Multimedia</div>
+          <p class="team-desc">Encargado de las relaciones virtuales y la exposicion de la empresa.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar" style="background:var(--dorado-suave);">👩‍🎨</div>
+          <div class="team-name">Claudia Cortes/Madre</div>
+          <div class="team-role">FUndadora & Maestra Confeccionista</div>
+          <p class="team-desc">Con 25 años de experiencia en confección de alta calidad, garantiza que cada polo sea perfecto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="background:var(--blanco-calido); padding:5rem 2rem; text-align:center;">
+    <div class="section-badge" style="display:inline-block;">¿Listo para vestir con Bellmont?</div>
+    <h2 class="section-title" style="margin-top:0.5rem;">Descubre nuestra<br/><span class="title-accent">Colección</span></h2>
+    <p style="color:#6c757d; margin:1rem auto 2rem; max-width:500px; font-size:0.95rem; line-height:1.7;">Explora nuestro catálogo completo o contáctanos para un pedido personalizado.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
+      <a href="contacto.html" class="btn btn-outline">Contactarnos</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">BELLMONT</div>
+        <p>Elegancia que define tu estilo.</p>
+        <div class="footer-social"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a></div>
+      </div>
+      <div class="footer-links"><h4>Páginas</h4><ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="personalizacion.html">Personalización</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul></div>
+      <div class="footer-links"><h4>Soporte</h4><ul>
+        <li><a href="#">Guía de tallas</a></li>
+        <li><a href="#">Envíos</a></li>
+        <li><a href="#">Devoluciones</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Bellmont. Todos los derechos reservados.</p>
+      <p>Hecho con ♦ en Colombia</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+    });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e,i) => {
+        if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); obs.unobserve(e.target); }
+      });
+    }, {threshold:0.1});
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

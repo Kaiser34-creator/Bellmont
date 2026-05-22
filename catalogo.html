@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo — Bellmont</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ---- Página Catálogo ---- */
+    .page-hero {
+      background: linear-gradient(135deg, #0D3B66 0%, #1D5C96 100%);
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(200,169,107,0.12) 0%, transparent 60%);
+    }
+    .page-hero h1 {
+      font-family: var(--font-titulo);
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      color: white;
+      position: relative;
+    }
+    .page-hero p {
+      color: rgba(255,255,255,0.72);
+      font-size: 1.05rem;
+      margin-top: 0.75rem;
+      position: relative;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+      position: relative;
+    }
+    .breadcrumb a { color: var(--dorado); font-size: 0.85rem; font-family: var(--font-titulo); font-weight: 500; }
+    .breadcrumb span { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+
+    /* Filtros */
+    .catalog-filters {
+      background: white;
+      border-bottom: 1px solid var(--gris-claro);
+      position: sticky;
+      top: 72px;
+      z-index: 50;
+    }
+    .filters-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-family: var(--font-titulo);
+      font-weight: 600;
+      font-size: 0.825rem;
+      color: var(--azul-principal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .filter-btn {
+      background: var(--gris-claro);
+      color: var(--gris-oscuro);
+      border: 1px solid var(--gris-claro);
+      padding: 0.4rem 1.1rem;
+      border-radius: 100px;
+      font-family: var(--font-titulo);
+      font-weight: 500;
+      font-size: 0.825rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--azul-principal);
+      color: white;
+      border-color: var(--azul-principal);
+    }
+    .filter-btn.gold.active {
+      background: var(--dorado);
+      border-color: var(--dorado);
+    }
+    .filter-sort {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .filter-sort select {
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radius);
+      padding: 0.4rem 0.75rem;
+      font-family: var(--font-titulo);
+      font-size: 0.825rem;
+      color: var(--gris-oscuro);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Grid catálogo */
+    .catalog-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+    .catalog-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .catalog-count {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    .catalog-count strong { color: var(--azul-principal); font-family: var(--font-titulo); }
+    .view-toggle {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .view-btn {
+      background: none;
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radius);
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .view-btn.active { background: var(--azul-principal); color: white; border-color: var(--azul-principal); }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      transition: var(--transition);
+    }
+    .catalog-grid.list-view {
+      grid-template-columns: 1fr;
+    }
+    .catalog-grid.list-view .product-card {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+    }
+    .catalog-grid.list-view .product-img-area {
+      height: 160px;
+    }
+
+    /* Card extendida */
+    .product-card .product-sizes {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .size-tag {
+      background: var(--gris-claro);
+      color: var(--gris-oscuro);
+      font-family: var(--font-titulo);
+      font-weight: 600;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .size-tag:hover { background: var(--azul-principal); color: white; }
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+    .stars { color: var(--dorado); font-size: 0.8rem; }
+    .rating-count { font-size: 0.75rem; color: #6c757d; }
+
+    /* Paginación */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 3rem;
+    }
+    .page-btn {
+      width: 40px; height: 40px;
+      border-radius: var(--radius);
+      border: 1px solid var(--gris-claro);
+      background: white;
+      font-family: var(--font-titulo);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .page-btn:hover, .page-btn.active { background: var(--azul-principal); color: white; border-color: var(--azul-principal); }
+
+    @media (max-width: 1024px) { .catalog-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .catalog-grid { grid-template-columns: repeat(2, 1fr); } .filters-inner { gap: 0.5rem; } }
+    @media (max-width: 480px) { .catalog-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="scrolled">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html"><span class="logo-text">BELLMONT</span></a>
+        <span class="logo-accent"></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html" style="color:var(--azul-principal); font-weight:700;">Catálogo</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <button class="nav-cta" onclick="location.href='contacto.html'">Hacer Pedido</button>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="section-badge">Colección 2025</div>
+    <h1>Catálogo <span class="title-accent">Bellmont</span></h1>
+    <p>Descubre nuestra colección completa de polos premium</p>
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,0.6)">Catálogo</span>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="catalog-filters">
+    <div class="filters-inner">
+      <span class="filter-label">Filtrar:</span>
+      <button class="filter-btn active" onclick="filterProducts(this,'todos')">Todos</button>
+      <button class="filter-btn" onclick="filterProducts(this,'clasico')">Clásico</button>
+      <button class="filter-btn" onclick="filterProducts(this,'premium')">Premium</button>
+      <button class="filter-btn" onclick="filterProducts(this,'sport')">Sport</button>
+      <button class="filter-btn gold" onclick="filterProducts(this,'especial')">Edición Especial</button>
+      <div class="filter-sort">
+        <span class="filter-label">Ordenar:</span>
+        <select onchange="sortProducts(this.value)">
+          <option value="destacados">Destacados</option>
+          <option value="precio-asc">Precio: Menor a Mayor</option>
+          <option value="precio-desc">Precio: Mayor a Menor</option>
+          <option value="nombre">Nombre A-Z</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATÁLOGO -->
+  <div class="catalog-wrapper">
+    <div class="catalog-top">
+      <p class="catalog-count">Mostrando <strong id="productCount">12</strong> productos</p>
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="setView('grid',this)" title="Vista cuadrícula">▦</button>
+        <button class="view-btn" onclick="setView('list',this)" title="Vista lista">☰</button>
+      </div>
+    </div>
+
+    <div class="catalog-grid" id="catalogGrid">
+
+      <!-- Producto 1 -->
+      <div class="product-card" data-cat="clasico" data-price="89900" data-name="Polo Elite Azul Navy">
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:#0D3B66;">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(48)</span></div>
+          <span class="product-category">Clásico</span>
+          <h3 class="product-name">Polo Elite Azul Navy</h3>
+          <p class="product-desc">Algodón peinado 100%, cuello tejido de punto, costuras reforzadas.</p>
+          <div class="product-sizes">
+            <span class="size-tag">XS</span><span class="size-tag">S</span><span class="size-tag">M</span>
+            <span class="size-tag">L</span><span class="size-tag">XL</span><span class="size-tag">XXL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#0D3B66;"></span>
+            <span class="color-dot" style="background:#1D5C96;"></span>
+            <span class="color-dot" style="background:#343A40;"></span>
+            <span class="color-dot" style="background:#F8F9FA;border:1px solid #ccc;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$89.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this, 'Polo Elite Azul Navy')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="product-card featured" data-cat="premium" data-price="124900" data-name="Polo Signature Bicolor">
+        <div class="product-badge-tag gold">Premium</div>
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:linear-gradient(135deg,#1D5C96,#0D3B66);">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(32)</span></div>
+          <span class="product-category">Premium</span>
+          <h3 class="product-name">Polo Signature Bicolor</h3>
+          <p class="product-desc">Diseño exclusivo bicolor con detalles dorados en cuello y mangas.</p>
+          <div class="product-sizes">
+            <span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#0D3B66;"></span>
+            <span class="color-dot" style="background:#C8A96B;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$124.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Signature Bicolor')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="product-card" data-cat="sport" data-price="74900" data-name="Polo Sport Gris">
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:#E9ECEF;">
+            <span class="polo-icon" style="filter:brightness(0.5);">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(21)</span></div>
+          <span class="product-category">Sport</span>
+          <h3 class="product-name">Polo Sport Gris</h3>
+          <p class="product-desc">Tejido transpirable de secado rápido, ideal para actividades al aire libre.</p>
+          <div class="product-sizes">
+            <span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span><span class="size-tag">XXL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#E9ECEF;border:1px solid #ccc;"></span>
+            <span class="color-dot" style="background:#343A40;"></span>
+            <span class="color-dot" style="background:#0D3B66;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$74.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Sport Gris')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="product-card" data-cat="especial" data-price="149900" data-name="Polo Golden Edition">
+        <div class="product-badge-tag" style="background:#C8A96B;">Nuevo</div>
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:linear-gradient(135deg,#0D3B66,#C8A96B);">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(15)</span></div>
+          <span class="product-category">Edición Especial</span>
+          <h3 class="product-name">Polo Golden Edition</h3>
+          <p class="product-desc">Bordado dorado en pecho, tela de lujo con terminaciones premium.</p>
+          <div class="product-sizes">
+            <span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#0D3B66;"></span>
+            <span class="color-dot" style="background:#C8A96B;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$149.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Golden Edition')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 5 -->
+      <div class="product-card" data-cat="clasico" data-price="89900" data-name="Polo Classic White">
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:#F0F0F0;">
+            <span class="polo-icon" style="filter:brightness(0.4);">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(37)</span></div>
+          <span class="product-category">Clásico</span>
+          <h3 class="product-name">Polo Classic White</h3>
+          <p class="product-desc">El blanco impecable que nunca falla. Algodón premium de alta gramatura.</p>
+          <div class="product-sizes">
+            <span class="size-tag">XS</span><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#F8F9FA;border:1px solid #ccc;"></span>
+            <span class="color-dot" style="background:#E9ECEF;border:1px solid #ccc;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$89.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Classic White')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 6 -->
+      <div class="product-card" data-cat="premium" data-price="134900" data-name="Polo Executive Slim">
+        <div class="product-badge-tag">Más Vendido</div>
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:#1a1a2e;">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(54)</span></div>
+          <span class="product-category">Premium</span>
+          <h3 class="product-name">Polo Executive Slim</h3>
+          <p class="product-desc">Corte slim fit para el ejecutivo moderno. Tela anti-arrugas de alta gama.</p>
+          <div class="product-sizes">
+            <span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#1a1a2e;"></span>
+            <span class="color-dot" style="background:#0D3B66;"></span>
+            <span class="color-dot" style="background:#C8A96B;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$134.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Executive Slim')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 7 -->
+      <div class="product-card" data-cat="sport" data-price="69900" data-name="Polo Sport Navy">
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:linear-gradient(135deg,#0D3B66,#1D5C96);">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★☆</span><span class="rating-count">(19)</span></div>
+          <span class="product-category">Sport</span>
+          <h3 class="product-name">Polo Sport Navy</h3>
+          <p class="product-desc">Rendimiento deportivo con estilo. Tejido funcional con protección UV.</p>
+          <div class="product-sizes">
+            <span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span><span class="size-tag">XXL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#0D3B66;"></span>
+            <span class="color-dot" style="background:#1D5C96;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$69.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Sport Navy')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Producto 8 -->
+      <div class="product-card" data-cat="especial" data-price="179900" data-name="Polo Royal Limited">
+        <div class="product-badge-tag gold">Limited</div>
+        <div class="product-img-area">
+          <div class="product-color-preview" style="background:linear-gradient(135deg,#C8A96B,#a8894b);">
+            <span class="polo-icon">👔</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-rating"><span class="stars">★★★★★</span><span class="rating-count">(8)</span></div>
+          <span class="product-category">Edición Limitada</span>
+          <h3 class="product-name">Polo Royal Limited</h3>
+          <p class="product-desc">Solo 50 unidades. Tela italiana, bordado artesanal exclusivo con hilo dorado.</p>
+          <div class="product-sizes">
+            <span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span>
+          </div>
+          <div class="product-colors">
+            <span class="color-dot" style="background:#C8A96B;"></span>
+            <span class="color-dot" style="background:#0D3B66;"></span>
+          </div>
+          <div class="product-footer">
+            <span class="product-price">$179.900</span>
+            <button class="btn-add-cart" onclick="addToCart(this,'Polo Royal Limited')">Agregar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">BELLMONT</div>
+        <p>Elegancia que define tu estilo.</p>
+        <div class="footer-social">
+          <a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a>
+        </div>
+      </div>
+      <div class="footer-links"><h4>Páginas</h4><ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="personalizacion.html">Personalización</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul></div>
+      <div class="footer-links"><h4>Soporte</h4><ul>
+        <li><a href="#">Guía de tallas</a></li>
+        <li><a href="#">Envíos</a></li>
+        <li><a href="#">Devoluciones</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Bellmont. Todos los derechos reservados.</p>
+      <p>Hecho con ♦ en Colombia</p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Filtros
+    function filterProducts(btn, cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('#catalogGrid .product-card');
+      let count = 0;
+      cards.forEach(card => {
+        const show = cat === 'todos' || card.dataset.cat === cat;
+        card.style.display = show ? '' : 'none';
+        if (show) count++;
+      });
+      document.getElementById('productCount').textContent = count;
+    }
+
+    // Ordenar
+    function sortProducts(val) {
+      const grid = document.getElementById('catalogGrid');
+      const cards = [...grid.querySelectorAll('.product-card')];
+      cards.sort((a, b) => {
+        if (val === 'precio-asc') return +a.dataset.price - +b.dataset.price;
+        if (val === 'precio-desc') return +b.dataset.price - +a.dataset.price;
+        if (val === 'nombre') return a.dataset.name.localeCompare(b.dataset.name);
+        return 0;
+      });
+      cards.forEach(c => grid.appendChild(c));
+    }
+
+    // Vista
+    function setView(type, btn) {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const grid = document.getElementById('catalogGrid');
+      grid.classList.toggle('list-view', type === 'list');
+    }
+
+    // Agregar al carrito
+    function addToCart(btn, name) {
+      const original = btn.textContent;
+      btn.textContent = '✓ Agregado';
+      btn.style.background = 'var(--dorado)';
+      setTimeout(() => { btn.textContent = original; btn.style.background = ''; }, 2000);
+    }
+
+    // Reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.product-card').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
+  </script>
+</body>
+</html>

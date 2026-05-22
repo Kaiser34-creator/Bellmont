@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto — Bellmont</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #0D3B66 0%, #1D5C96 100%);
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(200,169,107,0.12) 0%, transparent 60%);
+    }
+    .page-hero h1 { font-family: var(--font-titulo); font-weight: 800; font-size: clamp(2.2rem,5vw,3.5rem); color: white; position: relative; }
+    .page-hero p { color: rgba(255,255,255,0.72); font-size: 1.05rem; margin-top: 0.75rem; position: relative; }
+    .breadcrumb { display:flex; align-items:center; gap:.5rem; justify-content:center; margin-top:1.25rem; position:relative; }
+    .breadcrumb a { color:var(--dorado); font-size:.85rem; font-family:var(--font-titulo); font-weight:500; }
+    .breadcrumb span { color:rgba(255,255,255,0.4); font-size:.85rem; }
+
+    /* Contact layout */
+    .contact-page { max-width: 1280px; margin: 0 auto; padding: 5rem 2rem; }
+    .contact-page-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4rem; align-items: start; }
+
+    /* Info cards */
+    .contact-info-cards { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+    .info-card {
+      background: white;
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      transition: var(--transition);
+    }
+    .info-card:hover { border-color: var(--dorado); box-shadow: var(--sombra-card); transform: translateX(4px); }
+    .info-icon {
+      width: 48px; height: 48px;
+      background: var(--dorado-suave);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(200,169,107,0.25);
+    }
+    .info-card h4 { font-family: var(--font-titulo); font-weight: 700; color: var(--azul-principal); font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .info-card p { font-size: 0.875rem; color: #6c757d; line-height: 1.5; }
+    .info-card a { color: var(--azul-secundario); font-weight: 500; }
+
+    /* Horarios */
+    .horarios-table { width: 100%; margin-top: 1.5rem; }
+    .horarios-table tr { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--gris-claro); font-size: 0.875rem; }
+    .horarios-table tr:last-child { border: none; }
+    .horarios-table td:first-child { color: #6c757d; }
+    .horarios-table td:last-child { font-family: var(--font-titulo); font-weight: 600; color: var(--azul-principal); }
+    .horarios-table tr.closed td { color: #aaa !important; }
+
+    /* Form card */
+    .contact-form-card {
+      background: white;
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--sombra-card);
+    }
+    .form-title { font-family: var(--font-titulo); font-weight: 700; font-size: 1.4rem; color: var(--azul-principal); margin-bottom: 0.4rem; }
+    .form-subtitle { font-size: 0.9rem; color: #6c757d; margin-bottom: 2rem; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-titulo); font-weight: 600; font-size: 0.825rem; color: var(--azul-principal); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--gris-claro);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      color: var(--gris-oscuro);
+      background: var(--blanco-calido);
+      transition: var(--transition);
+      outline: none;
+      resize: vertical;
+      font-family: var(--font-texto);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--azul-secundario);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(29,92,150,0.1);
+    }
+
+    /* WhatsApp button */
+    .whatsapp-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: #25D366;
+      color: white;
+      padding: 1rem;
+      border-radius: var(--radius);
+      font-family: var(--font-titulo);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 1rem;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .whatsapp-btn:hover { background: #1db954; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
+
+    /* FAQ */
+    .faq-section { max-width: 1280px; margin: 0 auto; padding: 0 2rem 5rem; }
+    .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .faq-item {
+      background: white;
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .faq-item:hover { border-color: rgba(200,169,107,0.4); }
+    .faq-q {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-titulo);
+      font-weight: 600;
+      font-size: 0.925rem;
+      color: var(--azul-principal);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--dorado); flex-shrink: 0; transition: var(--transition); }
+    .faq-item.open .faq-q::after { content: '−'; }
+    .faq-a {
+      padding: 0 1.5rem;
+      font-size: 0.875rem;
+      color: #6c757d;
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 1.25rem; }
+
+    @media (max-width: 900px) {
+      .contact-page-grid { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar" class="scrolled">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html"><span class="logo-text">BELLMONT</span></a>
+        <span class="logo-accent"></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="contacto.html" style="color:var(--azul-principal);font-weight:700;">Contacto</a></li>
+      </ul>
+      <button class="nav-cta" onclick="location.href='catalogo.html'">Ver Catálogo</button>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-badge">Estamos para ayudarte</div>
+    <h1>Contáctanos <span class="title-accent">✦</span></h1>
+    <p>Respuesta garantizada en menos de 24 horas</p>
+    <div class="breadcrumb">
+      <a href="index.html">Inicio</a><span>›</span>
+      <span style="color:rgba(255,255,255,0.6)">Contacto</span>
+    </div>
+  </div>
+
+  <div class="contact-page">
+    <div class="contact-page-grid">
+
+      <!-- Info lateral -->
+      <div>
+        <div class="section-badge">Información de contacto</div>
+        <h2 class="section-title" style="font-size:1.8rem;">Hablemos de<br/><span class="title-accent">tu Pedido</span></h2>
+        <p class="section-desc" style="font-size:0.95rem;">Ya sea un pedido personal, empresarial o una consulta, estamos listos para atenderte con la mejor disposición.</p>
+
+        <div class="contact-info-cards">
+          <a href="https://wa.me/573112613701" class="info-card" target="_blank" style="text-decoration:none;">
+            <div class="info-icon">📱</div>
+            <div>
+              <h4>WhatsApp</h4>
+              <p>+57 311 261 3701<br/>Respuesta inmediata en horario laboral</p>
+            </div>
+          </a>
+          <a href="mailto:princoncortes@gmail.com" class="info-card" style="text-decoration:none;">
+            <div class="info-icon">📧</div>
+            <div>
+              <h4>Correo Electrónico</h4>
+              <p>princoncortes@gmail.com<br/>Respuesta en menos de 24 horas</p>
+            </div>
+          </a>
+          <div class="info-card">
+            <div class="info-icon">📍</div>
+            <div>
+              <h4>Ubicación</h4>
+              <p>Colombia<br/>Envíos a todo el país</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📸</div>
+            <div>
+              <h4>Redes Sociales</h4>
+              <p>
+                <a href="#">@bellmont.co</a> en Instagram<br/>
+                <a href="#">Bellmont Colombia</a> en Facebook
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem; background:white; border:1px solid var(--gris-claro); border-radius:var(--radius-lg); padding:1.5rem;">
+          <h4 style="font-family:var(--font-titulo); font-weight:700; color:var(--azul-principal); margin-bottom:1rem;">Horarios de Atención</h4>
+          <table class="horarios-table">
+            <tr><td>Lunes – Viernes</td><td>8:00 AM – 6:00 PM</td></tr>
+            <tr><td>Sábados</td><td>9:00 AM – 2:00 PM</td></tr>
+            <tr class="closed"><td>Domingos</td><td>Cerrado</td></tr>
+            <tr class="closed"><td>Festivos</td><td>Cerrado</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div>
+        <div class="contact-form-card">
+          <h3 class="form-title">Envíanos un Mensaje</h3>
+          <p class="form-subtitle">Completa el formulario y te contactamos a la brevedad posible.</p>
+          <form class="contact-form" id="mainContactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" placeholder="Tu nombre" required />
+              </div>
+              <div class="form-group">
+                <label>Teléfono / WhatsApp</label>
+                <input type="tel" placeholder="+57 300 000 0000" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico *</label>
+              <input type="email" placeholder="tu@email.com" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tipo de consulta</label>
+                <select>
+                  <option>Compra personal</option>
+                  <option>Pedido corporativo</option>
+                  <option>Personalización / Bordado</option>
+                  <option>Cotización mayorista</option>
+                  <option>Información general</option>
+                  <option>Reclamo o garantía</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Cantidad aproximada</label>
+                <select>
+                  <option>1 – 5 unidades</option>
+                  <option>6 – 20 unidades</option>
+                  <option>21 – 50 unidades</option>
+                  <option>Más de 50 unidades</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Mensaje *</label>
+              <textarea placeholder="Cuéntanos qué necesitas, tallas, colores, diseño, fecha de entrega..." rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Enviar Mensaje</button>
+          </form>
+          <a href="https://wa.me/573000000000?text=Hola,%20me%20interesa%20un%20polo%20Bellmont" class="whatsapp-btn" target="_blank">
+            <span>💬</span> Chatear por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div style="text-align:center; margin-bottom: 0.5rem;">
+      <div class="section-badge" style="display:inline-block;">FAQ</div>
+    </div>
+    <h2 class="section-title" style="text-align:center; font-size:2rem;">Preguntas <span class="title-accent">Frecuentes</span></h2>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q">¿Cuánto tiempo tarda un pedido?</div><div class="faq-a">Los pedidos individuales se procesan en 2-3 días hábiles. Pedidos corporativos o con personalización pueden tomar entre 7 y 15 días hábiles según la cantidad.</div></div>
+      <div class="faq-item"><div class="faq-q">¿Hacen envíos a toda Colombia?</div><div class="faq-a">Sí, hacemos envíos a todo el territorio nacional. Los tiempos de entrega varían entre 2 y 5 días hábiles según la ciudad de destino.</div></div>
+      <div class="faq-item"><div class="faq-q">¿Puedo personalizar con el logo de mi empresa?</div><div class="faq-a">¡Por supuesto! Ofrecemos bordado y estampado personalizado. Visita nuestra página de Personalización para conocer todos los detalles y requisitos del arte.</div></div>
+      <div class="faq-item"><div class="faq-q">¿Cuál es el mínimo para pedidos corporativos?</div><div class="faq-a">Para pedidos corporativos el mínimo es de 10 unidades. A partir de 20 unidades aplicamos descuentos especiales por volumen.</div></div>
+      <div class="faq-item"><div class="faq-q">¿Tienen política de cambios y devoluciones?</div><div class="faq-a">Sí. Aceptamos cambios dentro de los 30 días siguientes a la compra, siempre que la prenda no haya sido usada ni lavada. Las prendas personalizadas no aplican para devolución.</div></div>
+      <div class="faq-item"><div class="faq-q">¿Aceptan pagos a contra-entrega?</div><div class="faq-a">Sí, aceptamos pago contra-entrega, transferencia bancaria, PSE y tarjetas de crédito/débito. Para pedidos corporativos también manejamos facturación.</div></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">BELLMONT</div>
+        <p>Elegancia que define tu estilo.</p>
+        <div class="footer-social"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a></div>
+      </div>
+      <div class="footer-links"><h4>Páginas</h4><ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul></div>
+      <div class="footer-links"><h4>Soporte</h4><ul>
+        <li><a href="#">Guía de tallas</a></li>
+        <li><a href="#">Envíos</a></li>
+        <li><a href="#">Devoluciones</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Bellmont. Todos los derechos reservados.</p>
+      <p>Hecho con ♦ en Colombia</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+    });
+    document.getElementById('mainContactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = '✓ Mensaje enviado correctamente';
+      btn.style.background = '#1D5C96';
+      setTimeout(() => { btn.textContent = 'Enviar Mensaje'; btn.style.background = ''; e.target.reset(); }, 3500);
+    });
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
